@@ -4,7 +4,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
 
-    <changeSet id="init" author="ECHasov">
+    <!--<changeSet id="init" author="ECHasov">
         <sqlFile encoding="utf8" path="/db/changelog/2024/09/16-01-changelog-01.sql"/>
         <rollback/>
     </changeSet>
@@ -12,6 +12,17 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
     <changeSet id="update-client" author="ECHasov">
         <sqlFile encoding="utf8" path="/db/changelog/2024/09/16-01-changelog-02.sql"/>
         <rollback/>
+    </changeSet>-->
+    <changeSet id="fulfill-clients-list" author="raniszagid">
+        <sqlFile encoding="utf8" path="/db/changelog/task1/clients-list.sql"/>
+        <rollback/>
     </changeSet>
-
+    <changeSet id="create-entity-tables" author="raniszagid">
+        <sqlFile encoding="utf8" path="/db/changelog/task1/new-tables.sql"/>
+        <rollback/>
+    </changeSet>
+    <changeSet id="fulfill-account-transactions" author="raniszagid">
+        <sqlFile encoding="utf8" path="/db/changelog/task1/new-entities-list.sql"/>
+        <rollback/>
+    </changeSet>
 </databaseChangeLog>

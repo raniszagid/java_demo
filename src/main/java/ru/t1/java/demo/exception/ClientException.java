@@ -2,13 +2,12 @@ package ru.t1.java.demo.exception;
 
 public class ClientException extends RuntimeException {
     public ClientException() {
+        super("There is no entity with current id");
     }
-
-    public ClientException(String message) {
-        super(message);
+    public ClientException(Long id) {
+        super(String.format("There is no entity with id %d", id));
     }
-
-    public ClientException(String message, Throwable cause) {
-        super(message, cause);
+    public ClientException(String accountType) {
+        super("Wrong value of account type: " + accountType);
     }
 }
