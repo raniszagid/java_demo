@@ -3,15 +3,15 @@ package ru.t1.java.demo.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.t1.java.demo.aop.HandlingResult;
-import ru.t1.java.demo.aop.LogDataSourceError;
-import ru.t1.java.demo.aop.Track;
-import ru.t1.java.demo.aop.LogException;
+import ru.t1.java.demo.aop.annotation.HandlingResult;
+import ru.t1.java.demo.aop.annotation.LogDataSourceError;
+import ru.t1.java.demo.aop.annotation.Track;
+import ru.t1.java.demo.aop.annotation.LogException;
 import ru.t1.java.demo.dto.ClientDto;
 import ru.t1.java.demo.exception.ClientException;
 import ru.t1.java.demo.model.Client;
 import ru.t1.java.demo.service.ClientService;
-import ru.t1.java.demo.util.ClientMapper;
+import ru.t1.java.demo.mapper.ClientMapper;
 
 import java.io.IOException;
 import java.util.List;
@@ -34,7 +34,7 @@ public class ClientController {
         Client client = clientService.get(id).orElseThrow(ClientException::new);
         return clientMapper.toDto(client);
     }
-    @PostMapping("/new")
+    @PostMapping
     public void create(@RequestBody ClientDto clientDto) {
         Client client = clientMapper.toEntity(clientDto);
         clientService.save(client);

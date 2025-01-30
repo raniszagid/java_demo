@@ -1,4 +1,4 @@
-package ru.t1.java.demo.util;
+package ru.t1.java.demo.mapper;
 
 import org.springframework.stereotype.Component;
 import ru.t1.java.demo.dto.ClientDto;

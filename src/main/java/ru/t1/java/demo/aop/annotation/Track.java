@@ -1,4 +1,4 @@
-package ru.t1.java.demo.aop;
+package ru.t1.java.demo.aop.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -6,6 +6,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface LogDataSourceError {
+@Target(ElementType.METHOD)
+public @interface Track {
 }

@@ -1,5 +1,7 @@
 package ru.t1.java.demo.exception;
 
+import org.springframework.http.HttpStatus;
+
 public class ClientException extends RuntimeException {
     public ClientException() {
         super("There is no entity with current id");

@@ -6,8 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.t1.java.demo.aop.LogDataSourceError;
-import ru.t1.java.demo.model.enums.AccountType;
+import ru.t1.java.demo.aop.annotation.LogDataSourceError;
 
 import java.io.Serializable;
 

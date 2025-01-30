@@ -2,16 +2,19 @@ package ru.t1.java.demo.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.t1.java.demo.aop.LogDataSourceError;
+import ru.t1.java.demo.aop.annotation.LogDataSourceError;
+import ru.t1.java.demo.aop.annotation.Metric;
 import ru.t1.java.demo.dto.AccountDto;
 import ru.t1.java.demo.exception.ClientException;
+import ru.t1.java.demo.kafka.consumer.KafkaAccountConsumer;
+import ru.t1.java.demo.kafka.producer.KafkaAccountProducer;
 import ru.t1.java.demo.model.Account;
-import ru.t1.java.demo.model.Client;
-import ru.t1.java.demo.model.enums.AccountType;
 import ru.t1.java.demo.service.AccountService;
 import ru.t1.java.demo.service.ClientService;
-import ru.t1.java.demo.util.AccountMapper;
+import ru.t1.java.demo.mapper.AccountMapper;
 
 import java.util.List;
 
@@ -24,16 +27,20 @@ public class AccountController {
     private final ClientService clientService;
     private final AccountService accountService;
     private final AccountMapper accountMapper;
+    private final KafkaAccountProducer producer;
     @GetMapping
+    @Metric
     public List<AccountDto> getAll() {
         return accountService.getAll().stream().map(accountMapper::toDto).toList();
     }
     @GetMapping("/{id}")
+    @Metric(1)
     public AccountDto getCertain(@PathVariable("id") Long id) {
         Account account = accountService.get(id).orElseThrow(() -> new ClientException(id));
         return accountMapper.toDto(account);
     }
-    @PostMapping("/new")
+    @Metric
+    @PostMapping
     public void create(@RequestBody AccountDto accountDto) {
         validate(accountDto);
         accountService.save(accountMapper.toEntity(accountDto));
@@ -49,6 +56,14 @@ public class AccountController {
     public void delete(@PathVariable("id") Long id) {
         Account account = accountService.get(id).orElseThrow(() -> new ClientException(id));
         accountService.delete(account);
+    }
+    // метод разработан для тестирования передачи данных по следующей схеме
+    // controller -> producer -> consumer -> service -> database
+    @Metric
+    @PostMapping("/test_producer")
+    public void createSendingToTopic(@RequestBody AccountDto accountDto) {
+        validate(accountDto);
+        producer.send(accountDto);
     }
     private void validate(AccountDto accountDto) {
         clientService.get(accountDto.getClientId())

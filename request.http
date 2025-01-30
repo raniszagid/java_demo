@@ -2,7 +2,7 @@
 
 
 # слишком длинное имя
-POST http://localhost:8080/clients/new
+POST http://localhost:8080/clients
 Content-Type: application/json
 
 {
@@ -13,7 +13,7 @@ Content-Type: application/json
 
 ###
 # несуществующий AccountType
-POST http://localhost:8080/accounts/new
+POST http://localhost:8080/accounts
 Content-Type: application/json
 
 {"client_id" : 200,
@@ -22,12 +22,12 @@ Content-Type: application/json
 
 ###
 # ссылка на клиента с несуществующим id
-POST http://localhost:8080/accounts/new
+POST http://localhost:8080/accounts
 Content-Type: application/json
 
 {"client_id" : 366,
   "account_type" : "DEBIT",
-  "balance": 8888.00}
+  "balance": 99999.00}
 
 ###
 # запрос к несуществующей транзакции
@@ -35,3 +35,15 @@ GET http://localhost:8080/transactions/800
 ###
 # просмотреть базу логов ошибок
 GET http://localhost:8080/err
+
+###
+GET http://localhost:8080/accounts
+
+###
+POST http://localhost:8080/accounts/test_producer
+Content-Type: application/json
+
+{"client_id" : 100,
+  "account_type" : "DEBIT",
+  "balance": 99999.00}
+###
