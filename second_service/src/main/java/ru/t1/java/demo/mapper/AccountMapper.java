@@ -12,12 +12,15 @@ public class AccountMapper {
         AccountStatus status = dto.getAccountStatus() != null
                 ? AccountStatus.valueOf(dto.getAccountStatus())
                 : AccountStatus.OPEN;
+        Double frozenAmount = dto.getFrozenAmount() != null
+                ? dto.getFrozenAmount()
+                : 0.00;
         return Account.builder()
                 .clientId(dto.getClientId())
                 .accountType(AccountType.valueOf(dto.getAccountType()))
                 .balance(dto.getBalance())
                 .accountStatus(status)
-                .frozenAmount(dto.getFrozenAmount())
+                .frozenAmount(frozenAmount)
                 .accountId(dto.getAccountId())
                 .build();
     }

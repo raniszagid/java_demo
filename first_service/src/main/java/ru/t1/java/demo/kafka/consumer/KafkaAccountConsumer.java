@@ -50,8 +50,7 @@ public class KafkaAccountConsumer {
         }
     }
     private void validate(AccountDto accountDto) {
-        clientService.get(accountDto.getClientId())
-                .orElseThrow(() -> new ClientException(accountDto.getClientId()));
+        clientService.get(accountDto.getClientId());
         if (!(accountDto.getAccountType().equals("DEBIT") || accountDto.getAccountType().equals("CREDIT")))
             throw new ClientException(accountDto.getAccountType());
     }

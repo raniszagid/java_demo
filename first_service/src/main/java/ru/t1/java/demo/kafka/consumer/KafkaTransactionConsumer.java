@@ -56,15 +56,13 @@ public class KafkaTransactionConsumer {
     }
     private void writeTransaction(TransactionDto transactionDto) {
         Account account = accountService
-                .get(transactionDto.getAccountId())
-                .orElseThrow(ClientException::new);
+                .get(transactionDto.getAccountId());
         if (account.getAccountStatus().equals(AccountStatus.OPEN)) {
             log.info("Счёт открытый");
             transactionService.saveAccepting(transactionDto);
             accountService.changeBalance(account, transactionDto.getAmount());
             Acceptance acceptance = Acceptance.builder()
-                    .clientId(clientService.get(account.getClientId())
-                            .orElseThrow(ClientException::new).getClientId())
+                    .clientId(clientService.get(account.getClientId()).getClientId())
                     .accountId(account.getAccountId())
                     .transactionId(transactionDto.getTransactionId())
                     .timestamp(transactionDto.getTransactionTime())

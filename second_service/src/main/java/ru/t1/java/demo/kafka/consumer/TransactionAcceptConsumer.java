@@ -60,6 +60,7 @@ public class TransactionAcceptConsumer {
             ack.acknowledge();
         }
     }
+
     private void sendAnswerResult(Acceptance acceptance) {
         TransactionStatus status = assignTransactionStatus(acceptance);
         TransactionResult result = TransactionResult.builder()
@@ -69,6 +70,7 @@ public class TransactionAcceptConsumer {
                 .build();
         producer.send(result);
     }
+
     private TransactionStatus assignTransactionStatus(Acceptance acceptance) {
         if (isFrequencyForbidden(acceptance)) {
             log.warn("Слишком много транзакций за последний промежуток времени");
@@ -88,6 +90,7 @@ public class TransactionAcceptConsumer {
         log.info("транзакции конкретного счета за последнее время {}", number);
         return number >= n;
     }
+
     private boolean isTransactionAmountTooBig(Acceptance a) {
         return a.getAccountBalance() < 0.0;
     }

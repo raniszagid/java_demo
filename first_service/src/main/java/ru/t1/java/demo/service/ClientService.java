@@ -3,6 +3,7 @@ package ru.t1.java.demo.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.t1.java.demo.dto.ClientDto;
+import ru.t1.java.demo.exception.ClientException;
 import ru.t1.java.demo.model.Client;
 import ru.t1.java.demo.repository.ClientRepository;
 
@@ -14,8 +15,8 @@ import java.util.UUID;
 @Service
 public class ClientService {
     private final ClientRepository clientRepository;
-    public Optional<Client> get(Long id) {
-        return clientRepository.findById(id);
+    public Client get(Long id) {
+        return clientRepository.findById(id).orElseThrow(ClientException::new);
     }
     public List<Client> getAll() {
         return clientRepository.findAll();

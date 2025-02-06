@@ -14,11 +14,13 @@ import java.util.concurrent.ExecutionException;
 @Component
 public class KafkaErrorLogProducer {
     private final KafkaTemplate template;
+
     public void sendDataSourceLog(Message message) throws ExecutionException, InterruptedException {
         template.send(message).get();
         log.debug("Отправка в топик");
         template.flush();
     }
+
     public void sendMetricLog(Message<MetricErrorLog> message) {
         try {
             template.send(message).get();

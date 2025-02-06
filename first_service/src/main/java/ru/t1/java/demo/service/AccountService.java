@@ -22,8 +22,9 @@ public class AccountService {
     public List<Account> getAll() {
         return accountRepository.findAll();
     }
-    public Optional<Account> get(Long id) {
-        return accountRepository.findById(id);
+
+    public Account get(Long id) {
+        return accountRepository.findById(id).orElseThrow(() -> new ClientException(id));
     }
     public void save(Account account) {
         account.setAccountId(UUID.randomUUID());

@@ -8,7 +8,6 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -21,13 +20,10 @@ import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 import org.springframework.util.backoff.FixedBackOff;
-import ru.t1.java.demo.dto.ClientDto;
 import ru.t1.java.demo.kafka.MessageDeserializer;
-import ru.t1.java.demo.kafka.producer.KafkaClientProducer;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 @Slf4j
 @Configuration
@@ -46,11 +42,12 @@ public class KafkaConfig<T> {
     private String maxPollIntervalsMs;
     @Value("${t1.kafka.consumer.heartbeat.interval}")
     private String heartbeatInterval;
+    @Value("${t1.kafka.custom-settings.maximum}")
     @Getter
-    private final Long maxNumberPerTime = 2L;
+    private Long maxNumberPerTime;
+    @Value("${t1.kafka.custom-settings.minutes}")
     @Getter
-    private final Long minutesQuantity = 3L;
-
+    private Long minutesQuantity;
 
     @Bean
     public ConsumerFactory<String, Object> consumerListenerFactory() {
@@ -59,7 +56,6 @@ public class KafkaConfig<T> {
         props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, MessageDeserializer.class);
-        //props.put(JsonDeserializer.VALUE_DEFAULT_TYPE, "ru.t1.java.demo.model.dto.ClientDto");
         props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
         props.put(JsonDeserializer.USE_TYPE_INFO_HEADERS, false);
         props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, sessionTimeout);
@@ -69,13 +65,10 @@ public class KafkaConfig<T> {
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, Boolean.FALSE);
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.put(ConsumerConfig.HEARTBEAT_INTERVAL_MS_CONFIG, heartbeatInterval);
-
         props.put(ErrorHandlingDeserializer.VALUE_DESERIALIZER_CLASS, MessageDeserializer.class.getName());
         props.put(ErrorHandlingDeserializer.KEY_DESERIALIZER_CLASS, MessageDeserializer.class);
-
         props.put("maxNumberPerTime", maxNumberPerTime);
         props.put("minutesQuantity", minutesQuantity);
-        // I have changed generics
         DefaultKafkaConsumerFactory<String, Object> factory = new DefaultKafkaConsumerFactory<>(props);
         factory.setKeyDeserializer(new StringDeserializer());
         return factory;
@@ -114,6 +107,7 @@ public class KafkaConfig<T> {
     public KafkaTemplate<String, T> kafkaClientTemplate(@Qualifier("producerClientFactory") ProducerFactory<String, T> producerPatFactory) {
         return new KafkaTemplate<>(producerPatFactory);
     }
+
     @Bean("producerClientFactory")
     public ProducerFactory<String, T> producerClientFactory() {
         Map<String, Object> props = new HashMap<>();

@@ -54,6 +54,7 @@ public class TransactionResultConsumer {
             ack.acknowledge();
         }
     }
+
     private void processTransactionResult(TransactionResult result) {
         TransactionStatus status = result.getStatus();
         switch (status) {

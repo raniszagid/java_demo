@@ -17,7 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AccountDto implements Serializable {
+public class AccountDto {
     private Long id;
     @JsonProperty("client_id")
     private Long clientId;

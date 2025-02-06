@@ -24,10 +24,10 @@ public class LogDataSourceErrorAspect {
     private final DataSourceErrorLogService errorLogService;
 
     @Pointcut("@within(ru.t1.java.demo.aop.annotation.LogDataSourceError)")
-    public void loggingClasses() {}
+    public void joinPointsArea() {}
 
     @AfterThrowing(
-            pointcut = "loggingClasses() /*",
+            pointcut = "joinPointsArea() /*",
             throwing = "exception"
     )
     public void logToDatabase(JoinPoint joinPoint, Exception exception) {

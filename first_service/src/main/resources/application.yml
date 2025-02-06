@@ -35,3 +35,6 @@ t1:
       result: t1_demo_transaction_result
     listener:
       poll-timeout: 1000
+    custom-settings:
+      maximum: 2
+      minutes: 3

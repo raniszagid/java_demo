@@ -17,6 +17,7 @@ import java.util.concurrent.ExecutionException;
 @Component
 public class KafkaTransactionProducer {
     private final KafkaTemplate template;
+
     public void send(TransactionDto transactionDto) {
         Message<TransactionDto> message = MessageBuilder
                 .withPayload(transactionDto)
@@ -31,6 +32,7 @@ public class KafkaTransactionProducer {
         }
         template.flush();
     }
+
     public void sendAcceptance(Acceptance acceptance) {
         Message<Acceptance> message = MessageBuilder
                 .withPayload(acceptance)

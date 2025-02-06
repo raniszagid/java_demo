@@ -27,40 +27,47 @@ public class TransactionController {
     private final TransactionMapper transactionMapper;
     private final KafkaTransactionProducer producer;
     private final AccountService accountService;
+
     @GetMapping
     public List<TransactionDto> getAll() {
         return transactionService.getAll().stream().map(transactionMapper::toDto).toList();
     }
+
     @GetMapping("/{id}")
     public TransactionDto getCertain(@PathVariable("id") Long id) {
-        Transaction transaction = transactionService.get(id).orElseThrow(ClientException::new);
+        Transaction transaction = transactionService.get(id);
         return transactionMapper.toDto(transaction);
     }
+
     @PostMapping
     public void create(@RequestBody TransactionDto transactionDto) {
-        accountService.get(transactionDto.getAccountId()).orElseThrow(ClientException::new);
+        accountService.get(transactionDto.getAccountId());
         transactionDto.setTransactionTime(LocalDateTime.now());
         transactionService.save(transactionMapper.toEntity(transactionDto));
     }
+
     @PutMapping("/{id}")
     public void update(@PathVariable("id") Long id,
                        @RequestBody TransactionDto transactionDto) {
-        Transaction transaction = transactionService.get(id).orElseThrow(ClientException::new);
-        Account account = accountService.get(transactionDto.getAccountId()).orElseThrow(ClientException::new);
+        Transaction transaction = transactionService.get(id);
+        Account account = accountService.get(transactionDto.getAccountId());
         transactionService.change(transaction, transactionDto);
     }
+
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") Long id) {
-        Transaction transaction = transactionService.get(id).orElseThrow(ClientException::new);
+        Transaction transaction = transactionService.get(id);
         transactionService.delete(transaction);
     }
+
     @PostMapping("/produce")
     public void createSendingToTopic(@RequestBody TransactionDto transactionDto) {
         enrichTransaction(transactionDto);
         producer.send(transactionDto);
     }
+
     private void enrichTransaction(TransactionDto transactionDto) {
-        accountService.get(transactionDto.getAccountId()).orElseThrow(ClientException::new);
+        accountService.get(transactionDto.getAccountId());
         transactionDto.setTransactionTime(LocalDateTime.now());
         transactionDto.setTransactionId(UUID.randomUUID());
     }

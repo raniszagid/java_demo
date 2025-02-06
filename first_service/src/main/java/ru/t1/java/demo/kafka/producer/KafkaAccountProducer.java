@@ -14,6 +14,7 @@ import org.springframework.messaging.support.MessageBuilder;
 @Component
 public class KafkaAccountProducer {
     private final KafkaTemplate template;
+
     public void send(AccountDto accountDto) {
         Message<AccountDto> message = MessageBuilder
                 .withPayload(accountDto)

@@ -24,8 +24,8 @@ public class TransactionService {
     public List<Transaction> getAll() {
         return transactionRepository.findAll();
     }
-    public Optional<Transaction> get(Long id) {
-        return transactionRepository.findById(id);
+    public Transaction get(Long id) {
+        return transactionRepository.findById(id).orElseThrow(ClientException::new);
     }
     public void save(Transaction transaction) {
         transactionRepository.save(transaction);
